@@ -1,0 +1,14 @@
+{
+  "name": "video-catcher",
+  "version": "1.3.0",
+  "description": "Video downloader skill for local agents: download mp4/m3u8/mpd videos from YouTube/Bilibili/Douyin/TikTok/X/Instagram and other sites, batch download with concurrency, subtitles/covers, inspect media resources, list available qualities, resume interrupted downloads, dedupe download history, and save WeChat official-account articles as offline HTML/Markdown. Automatic fallback chain: yt-dlp -> Lux -> YouTube PO Token -> impersonation -> web_safari -> static discovery. Non-interactive by default.",
+  "entry": "SKILL.md",
+  "capabilities": [
+    "video-download",
+    "media-detection",
+    "subtitle-cover-download",
+    "batch-download",
+    "download-history-dedupe",
+    "article-offline-save"
+  ]
+}

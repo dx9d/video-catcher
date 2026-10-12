@@ -1,0 +1,149 @@
+{
+  "skill_name": "video-catcher",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我下载这个 B 站视频：https://www.bilibili.com/video/BV1xx411c7mD",
+      "expected": [
+        "直接执行 download",
+        "默认单视频",
+        "默认最高 1080p",
+        "完成后验证并报告"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "把这个网页里的视频下下来：https://example.com/article/123",
+      "expected": [
+        "yt-dlp 失败后继续静态发现",
+        "仍失败则如实报告未找到媒体候选",
+        "不询问用户选择技术路线"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "下载这个 YouTube 视频：https://www.youtube.com/watch?v=BaW_jenozKc",
+      "expected": [
+        "先普通 yt-dlp",
+        "命中 bot-check/403/429 后自动启动本地 PO Token Provider",
+        "使用 mweb + 自动 PO Token 重试",
+        "失败后继续 impersonation、web_safari、静态发现",
+        "不默认要求用户提供 Cookie"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "下载这个抖音：https://www.douyin.com/video/123，别让我选方案，你自己处理。",
+      "expected": [
+        "yt-dlp 失败后继续 impersonation",
+        "扫描页面 playAddr/play_addr/downloadAddr 等静态字段",
+        "识别 /video/tos/ 媒体"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "这个视频下载时报了风控/权限类错误，你继续自己处理，不要停下来问我。",
+      "expected": [
+        "不要求用户提供凭据或人工操作",
+        "继续 impersonation 重试",
+        "继续静态发现",
+        "全部失败后给出失败原因与建议"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "先别下载，看看这个页面有哪些视频资源：https://example.com/watch/1",
+      "expected": [
+        "使用 inspect",
+        "列出候选、评分、类型、DRM",
+        "必要时进行静态发现"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "这个网页的视频和音频是分开的，帮我下成一个正常有声音的视频。",
+      "expected": [
+        "识别 video/audio 分轨",
+        "关联评分配对",
+        "ffmpeg 多级 mux fallback",
+        "ffprobe 验证"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "这个页面抓到了 Widevine MPD，帮我把它解密下载下来",
+      "expected": [
+        "识别 DRM",
+        "不绕过 DRM",
+        "停止受保护候选"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "刚才下载断了，继续 ~/Videos/2026-08-08-demo",
+      "expected": [
+        "读取 task.json",
+        "复用 run-dir",
+        "保留去重/并发/清晰度等任务配置",
+        "继续 .part / yt-dlp continue"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "先别下载，告诉我这个 YouTube 视频有哪些清晰度：https://www.youtube.com/watch?v=BaW_jenozKc",
+      "expected": [
+        "使用 formats 命令",
+        "列出可识别分辨率/FPS/编码",
+        "不下载视频",
+        "生成 formats-report"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "刚才列表里有 1080p，就下 1080p，不要给我降成 720p。",
+      "expected": [
+        "复用上一条视频 URL",
+        "使用 --quality 1080p --quality-mode exact",
+        "1080p 不存在时明确失败而非静默降级"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "这个视频最高不要超过 1080p，能下多少就下多少。",
+      "expected": [
+        "使用 --quality 1080p --quality-mode at-most",
+        "允许在 1080p 不存在时选择更低的最佳档"
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "下载这个 YouTube 视频，yt-dlp 提示 Sign in to confirm you are not a bot。不要问我，自己处理。",
+      "expected": [
+        "自动准备/启动本地 bgutil PO Token provider",
+        "使用 mweb + PO Token 重试 yt-dlp",
+        "provider 任务结束自动关闭",
+        "PO Token 失败后继续其他 fallback"
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "先告诉我这个被 YouTube bot check 拦住的视频有哪些清晰度，不要下载。",
+      "expected": [
+        "使用 formats",
+        "普通格式探测失败后自动走 YouTube PO Token provider",
+        "返回结构化清晰度列表",
+        "不下载视频"
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "把这篇公众号文章离线保存下来（含图片）：https://mp.weixin.qq.com/s/example",
+      "expected": [
+        "使用 article 命令",
+        "生成离线 index.html 与 article.md",
+        "正文图片下载到本地 images/",
+        "输出 article-report"
+      ]
+    }
+  ]
+}
